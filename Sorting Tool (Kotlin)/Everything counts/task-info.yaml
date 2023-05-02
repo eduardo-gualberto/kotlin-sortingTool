@@ -1,0 +1,417 @@
+type: edu
+files:
+- name: src/sorting/Main.kt
+  visible: true
+  text: "package sorting\n\nimport java.util.Scanner\n\nfun readInputData(dataType:\
+    \ String) : String {\n    val scanner = Scanner(System.`in`)\n//     val scanner\
+    \ = Scanner(\"1 -2   333 4\\n42\\n1                 1\\n\")\n    var result =\
+    \ \"\"\n    \n    while(scanner.hasNextLine()) {\n        if (dataType == \"line\"\
+    ) {\n            val input = scanner.nextLine()\n            result += \"$input\"\
+    \n            result += \"\\n\"\n        }\n        else {\n            val input\
+    \ = scanner.nextLine().replace(\"\\\\s+\".toRegex(), \" \")\n            result\
+    \ += \"$input\"\n            result += \" \"\n        }\n    }\n    return result.trimIndent()\n\
+    }\n\n\nfun inputWordToList(inputData: String) : List<String> {\n    val scanner\
+    \ = Scanner(inputData)\n    \n    var list = mutableListOf<String>()\n    while\
+    \ (scanner.hasNext())\n        list.add(scanner.next())\n    return list.toList()\t\
+    \t\n}\n\nfun inputNumberToList(inputData: String) : List<Int> {\n    val scanner\
+    \ = Scanner(inputData)\n    \n    var list = mutableListOf<Int>()\n    while (scanner.hasNextInt())\n\
+    \    \tlist.add(scanner.nextInt())\n    return list.toList()\n}\n\nfun inputLineToList(inputData:\
+    \ String) : List<String> {\n    var list = inputData.split(\"\\n\").toList()\n\
+    \    return list\n}\n\n\nfun totalCountNumber(list: List<Int>) : Int {\n    return\
+    \ list.count()\n}\n\nfun totalCountString(list: List<String>) : Int {\n    return\
+    \ list.count()\n}\n\nfun maxNumber(list: List<Int>) : Int {\n    return list.maxOrNull()\
+    \ ?: 0\n}\n\nfun maxWord(list: List<String>) : String {\n    return list.maxByOrNull\
+    \ { l -> l.length } ?: \"\"\n}\n\nfun maxLine(list: List<String>) : String {\n\
+    \    return list.maxByOrNull { l -> l.length } ?: \"\"\n}\n\nfun maxCount(list:\
+    \ List<Int>, max: Int) : Int {\n    return list.count{ it == max }\n}\n\nfun maxCount(list:\
+    \ List<String>, max: String) : Int {\n    return list.count{ it == max }\n}\n\n\
+    fun maxPercentage(list: List<Int>, max: Int) : Double {\n    val maxCount = maxCount(list,\
+    \ max).toDouble()\n    return maxCount / list.size\n}\n\nfun maxPercentage(list:\
+    \ List<String>, max: String) : Double {\n    val maxCount = maxCount(list, max).toDouble()\n\
+    \    return maxCount / list.size\n}\n\nfun swap(list: MutableList<Int>, i: Int,\
+    \ j: Int) {\n    val t = list[i]\n    list[i] = list[j]\n    list[j] = t\n}\n\n\
+    fun merge(list1: List<Int>, list2: List<Int>) : List<Int> {\n    var i = 0\n \
+    \   var j = 0\n    val resultList = mutableListOf<Int>()\n    while(i < list1.size\
+    \ && j < list2.size) {\n        if(list1[i] < list2[j])\n            resultList.add(list1[i++])\n\
+    \        else\n            resultList.add(list2[j++])\n    }\n    while (i < list1.size)\
+    \ resultList.add(list1[i++])\n    while (j < list2.size) resultList.add(list2[j++])\n\
+    \n    return resultList.toList()\n}\n\nfun mergeSort(list: List<Int>) : List<Int>\
+    \ {\n    if (list.size == 1)\n        return listOf<Int>(list[0])\n    if (list.isEmpty())\n\
+    \        return emptyList<Int>()\n    \n    val pivot = list.size / 2\n    val\
+    \ left = mergeSort(list.subList(0, pivot))\n    val right = mergeSort(list.subList(pivot,\
+    \ list.size))\n\n    return merge(left, right)    \n}\n\nfun printerLine(inputList:\
+    \ List<String>) {\n    val maxLine = maxLine(inputList)\n    println(\"Total lines\
+    \ ${totalCountString(inputList)}.\")\n    println(\"The longest line:\\n$maxLine\\\
+    n(${maxCount(inputList, maxLine)} time(s), ${(maxPercentage(inputList, maxLine)\
+    \ * 100).toInt()}%).\")\n}\n\nfun printerWord(inputList: List<String>) {\n   \
+    \ val maxWord = maxWord(inputList)\n    println(\"Total words: ${totalCountString(inputList)}.\"\
+    )\n    println(\"The longest word: $maxWord (${maxCount(inputList, maxWord)} time(s),\
+    \ ${(maxPercentage(inputList, maxWord) * 100).toInt()}%).\")\n}\n\nfun printerNumber(inputList:\
+    \ List<Int>) {\n    val maxNumber = maxNumber(inputList)\n    println(\"Total\
+    \ numbers: ${totalCountNumber(inputList)}.\")\n    println(\"The greatest number:\
+    \ $maxNumber (${maxCount(inputList, maxNumber)} time(s), ${(maxPercentage(inputList,\
+    \ maxNumber) * 100).toInt()}%).\")\n}\n\nfun printerSorting(inputList: List<Int>)\
+    \ {\n    // val maxNumber = maxNumber(inputList)\n    println(\"Total numbers:\
+    \ ${totalCountNumber(inputList)}.\")\n    println(\"Sorted data: ${mergeSort(inputList).joinToString(\"\
+    \ \")}\")\n}\n\nfun main(args: Array<String>) {\n    // write your code here\n\
+    \    // print(args[0] + \" \")\n    // println(args[1])\n    val isSortIntegers\
+    \ = \"-sortIntegers\" in args\n    var dataType = \"word\"\n    \n    if (isSortIntegers)\n\
+    \    \tdataType = \"long\"\n    else if (args.size == 2)\n    \tdataType = args[1]\n\
+    \    \n    val inputData = readInputData(dataType)\n    \n    when (dataType)\
+    \ {\n        \"line\" -> {\n            val dataList = inputLineToList(inputData)\n\
+    \        \tprinterLine(dataList)\n        }\n        \"word\" -> {\n         \
+    \   val dataList = inputWordToList(inputData)\n            printerWord(dataList)\n\
+    \        }\n        else -> {\n            val dataList = inputNumberToList(inputData)\n\
+    \            if (isSortIntegers)\n                printerSorting(dataList)\n \
+    \           else\n                printerNumber(dataList)\n        }\n    }\n}"
+  learner_created: false
+- name: test/common/SortingToolStage4Test.kt
+  visible: false
+  text: |+
+    package common
+
+    import org.hyperskill.hstest.stage.StageTest
+    import org.hyperskill.hstest.testcase.CheckResult
+    import org.hyperskill.hstest.testcase.TestCase
+    import org.hyperskill.hstest.testing.Settings
+    import java.util.*
+
+    class SortingToolStage4Test : StageTest<SortingToolClue>() {
+
+        init {
+            Settings.allowOutOfInput = true
+        }
+
+        override fun generate(): List<TestCase<SortingToolClue>> {
+            return stage4Tests()
+        }
+
+        override fun check(reply: String, clue: SortingToolClue): CheckResult {
+            return when {
+                "byCount" in clue.args -> checkByCount(reply, clue)
+                else -> checkNatural(reply, clue)
+            }
+        }
+
+        private fun checkByCount(reply: String, clue: SortingToolClue): CheckResult {
+            return when {
+                "long" in clue.args -> checkByCount(parseLongTokens(clue.consoleInput), { it.toInt() }, clue, reply)
+                "word" in clue.args -> checkByCount(parseWordTokens(clue.consoleInput), { it }, clue, reply)
+                "line" in clue.args -> checkByCount(parseLineTokens(clue.consoleInput), { it }, clue, reply)
+
+                else -> throw IllegalArgumentException("Bad test: no data type found")
+            }
+        }
+
+        private fun checkNatural(reply: String, clue: SortingToolClue): CheckResult {
+            return when {
+                "long" in clue.args -> checkNatural(parseLongTokens(clue.consoleInput), ::parseLongTokens, clue, reply)
+                "word" in clue.args -> checkNatural(parseWordTokens(clue.consoleInput), ::parseWordTokens, clue, reply)
+                "line" in clue.args -> checkNatural(parseLineTokens(clue.consoleInput), ::parseLineTokens, clue, reply)
+
+                else -> throw IllegalArgumentException("Bad test: no data type found")
+            }
+        }
+    }
+
+    fun stage4Tests(): List<TestCase<SortingToolClue>> {
+        return listOf(
+            createTest(
+                """
+                    |1 -2   333 4
+                    |42
+                    |1                 1
+                    """.trimMargin(),
+                true,
+                "-dataType", "long", "-sortingType", "natural"
+            ),
+            createTest(
+                """
+                    |1 -2   333 4
+                    |42
+                    |1                 1
+                    """.trimMargin(),
+                true,
+                "-dataType", "long"
+            ),
+            createTest(
+                """
+                    |1 -2   333 4
+                    |42
+                    |1                 1
+                    """.trimMargin(),
+                true,
+                "-sortingType", "byCount", "-dataType", "long"
+            ),
+            createTest(
+                """
+                    |1 -2   333 4
+                    |42
+                    |1                 1
+                    """.trimMargin(),
+                true,
+                "-sortingType", "byCount", "-dataType", "word"
+            ),
+            createTest(
+                """
+                    |1 -2   333 4
+                    |42
+                    |42
+                    |1                 1
+                    """.trimMargin(),
+                true,
+                "-sortingType", "byCount", "-dataType", "line"
+            ),
+            createTest(
+                """
+                    |1111 1111
+                    |22222
+                    |3
+                    |44
+                    """.trimMargin(),
+                false,
+                "-sortingType", "byCount", "-dataType", "line"
+            ),
+            createTest(
+                """
+                    |1111 1111
+                    |22222
+                    |3
+                    |44
+                    """.trimMargin(),
+                false,
+                "-sortingType", "byCount", "-dataType", "word"
+            ),
+            createTest(
+                """
+                    |1111 1111
+                    |22222
+                    |3
+                    |44
+                    """.trimMargin(),
+                false,
+                "-sortingType", "byCount", "-dataType", "long"
+            )
+        )
+    }
+
+
+
+    fun revealRawTest(clue: SortingToolClue, reply: String): String {
+        return with(clue) { "Args:\n${args.joinToString(" ")}\nInput:\n$consoleInput\nYour output:\n$reply\n\n" }
+    }
+
+    class SortingToolClue(val consoleInput: String, val revealTest: Boolean, val args: List<String>)
+
+    fun createTest(
+        consoleInput: String,
+        revealTest: Boolean,
+        vararg args: String = arrayOf("-dataType", "long")
+    ): TestCase<SortingToolClue> {
+        return TestCase<SortingToolClue>()
+            .setAttach(SortingToolClue(consoleInput, revealTest, args.toList()))
+            .setInput(consoleInput)
+            .addArguments(*args)
+    }
+
+    fun parseLongTokens(input: String): List<Int> {
+        val scanner = Scanner(input)
+
+        val longTokens = mutableListOf<Int>()
+
+        while (scanner.hasNextInt()) {
+            longTokens.add(scanner.nextInt())
+        }
+
+        return longTokens
+    }
+
+    fun parseWordTokens(input: String): List<String> {
+        val scanner = Scanner(input)
+
+        val wordTokens = mutableListOf<String>()
+
+        while (scanner.hasNext()) {
+            wordTokens.add(scanner.next())
+        }
+
+        return wordTokens
+    }
+
+    fun parseLineTokens(input: String): List<String> {
+        return input.lines()
+    }
+
+    fun <TokenType : Comparable<TokenType>> checkNatural(
+        actualTokens: List<TokenType>,
+        sortedTokensParser: (String) -> List<TokenType>,
+        clue: SortingToolClue,
+        reply_: String
+    ): CheckResult {
+        val reply = reply_.trim()
+        val lines = reply.lines()
+
+        if (lines.size != 2) {
+            return if (clue.revealTest) {
+                CheckResult(
+                    false,
+                    "Can't parse your output: expected 2 lines.\n" +
+                        revealRawTest(clue, reply)
+                )
+            } else {
+                CheckResult(false, "Can't parse your output: expected 2 lines.")
+            }
+        }
+
+        val totalRegex = """(\d+)""".toRegex()
+        val totalMatchResult = totalRegex.find(lines[0])
+        if (totalMatchResult == null) {
+            return if (clue.revealTest) {
+                CheckResult(
+                    false,
+                    "Can't find number in the first line of your output.\n" +
+                        revealRawTest(clue, reply)
+                )
+            } else {
+                CheckResult(false, "Can't find number in the first line of your output.")
+            }
+        }
+
+        val totalTokens = totalMatchResult.groupValues[1].toInt()
+
+        val actualTotal = actualTokens.size
+
+        if (actualTotal != totalTokens) {
+            return if (clue.revealTest) {
+                CheckResult(
+                    false,
+                    "Total tokens ($totalTokens) are incorrect. Expected: $actualTotal.\n" +
+                        revealRawTest(clue, reply)
+                )
+            } else {
+                CheckResult(false, "Total tokens are incorrect.")
+            }
+        }
+
+        val sortedActualTokens = actualTokens.sorted()
+
+        val sortedTokens = sortedTokensParser(lines[1].substringAfter(":").dropWhile { it in setOf('\n', '\r') })
+
+        val total = sortedTokens.size
+
+        if (actualTotal != total) {
+            return if (clue.revealTest) {
+                CheckResult(
+                    false,
+                    "Total sorted tokens ($total) are incorrect. Expected: $actualTotal.\n" +
+                        revealRawTest(clue, reply)
+                )
+            } else {
+                CheckResult(false, "Total sorted tokens are incorrect.")
+            }
+        }
+
+        if (sortedActualTokens != sortedTokens) {
+            return if (clue.revealTest) {
+                CheckResult(
+                    false,
+                    "Sorted tokens are incorrect.\n" +
+                        revealRawTest(clue, reply)
+                )
+            } else {
+                CheckResult(false, "Sorted tokens are incorrect.")
+            }
+        }
+
+        return CheckResult(true)
+    }
+
+    fun <TokenType : Comparable<TokenType>> checkByCount(
+        actualTokens: List<TokenType>,
+        tokenParser: (String) -> TokenType,
+        clue: SortingToolClue,
+        reply_: String
+    ): CheckResult {
+        val reply = reply_.trim()
+        val lines = reply.lines()
+
+        val totalRegex = """(\d+)""".toRegex()
+        val totalMatchResult = totalRegex.find(lines[0])
+        if (totalMatchResult == null) {
+            return if (clue.revealTest) {
+                CheckResult(
+                    false,
+                    "Can't find number in the first line of your output.\n" +
+                        revealRawTest(clue, reply)
+                )
+            } else {
+                CheckResult(false, "Can't find number in the first line of your output.")
+            }
+        }
+
+        val totalTokens = totalMatchResult.groupValues[1].toInt()
+
+        val actualTotal = actualTokens.size
+
+        if (actualTotal != totalTokens) {
+            return if (clue.revealTest) {
+                CheckResult(
+                    false,
+                    "Total tokens ($totalTokens) are incorrect. Expected: $actualTotal.\n" +
+                        revealRawTest(clue, reply)
+                )
+            } else {
+                CheckResult(false, "Total tokens are incorrect.")
+            }
+        }
+
+        val tokenToCount = mutableMapOf<TokenType, Int>()
+
+        for (token in actualTokens) {
+            tokenToCount[token] = (tokenToCount[token] ?: 0) + 1
+        }
+
+        val actualSortedByCount = tokenToCount.toList().sortedWith(compareBy({ it.second }, { it.first }))
+        val linesWithTokens = lines.drop(1)
+
+        if (actualSortedByCount.size != linesWithTokens.size) {
+            return if (clue.revealTest) {
+                CheckResult(
+                    false,
+                    "Lines with tokens (${linesWithTokens.size}) are incorrect. Expected: ${actualSortedByCount.size}.\n" +
+                        revealRawTest(clue, reply)
+                )
+            } else {
+                CheckResult(false, "Lines with tokens are incorrect.")
+            }
+        }
+
+        for ((lineId, line) in linesWithTokens.withIndex()) {
+            val token = tokenParser(line.substringBefore(':'))
+            val info = line.substringAfter(':')
+
+            val (actualToken, actualTimes) = actualSortedByCount[lineId]
+
+            if (token != actualToken) {
+                return if (clue.revealTest) {
+                    CheckResult(
+                        false,
+                        "Token ($token) is incorrect. Expected: $actualToken.\n" +
+                            revealRawTest(clue, reply)
+                    )
+                } else {
+                    CheckResult(false, "Token is incorrect.")
+                }
+            }
+
+            // TODO: check info (times and percentage)
+        }
+
+        return CheckResult(true)
+    }
+
+
+  learner_created: false
+feedback_link: https://hyperskill.org/learn/step/9626#comment
+status: Solved
+record: 4
